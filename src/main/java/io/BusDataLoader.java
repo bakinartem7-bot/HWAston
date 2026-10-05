@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 
 public class BusDataLoader {
     private static final String[] MODELS = {"Volvo", "Mercedes", "Ikarus", "PAZ", "MAN", "Scania"};
+    private static final Random RANDOM = new Random();
 
     public static List<Bus> loadFromFile(String filePath) throws IOException {
         List<Bus> buses = new ArrayList<>();
@@ -44,26 +45,11 @@ public class BusDataLoader {
     }
 
     public static List<Bus> loadRandom(int length) {
-        List<Bus> buses = IntStream.range(0, length)
-                .mapToObj(i -> {
-                    Random random = new Random();
-                    String number = "BUS-" + (i + 1) + "-" + random.nextInt(1000);
-                    String model = MODELS[random.nextInt(MODELS.length)];
-                    long mileage = random.nextLong() % 200000;
-                    if (mileage < 0) mileage = -mileage;
-                    return new Bus.Builder().number(number).model(model).mileage(mileage).build();
-                })
-                .filter(BusValidator::isValidBus)
-                .collect(Collectors.toList());
-        return buses;
-    }
-
-    public static List<Bus> loadRandom(int length, Random random) {
         return IntStream.range(0, length)
                 .mapToObj(i -> {
-                    String number = "BUS-" + (i + 1) + "-" + random.nextInt(1000);
-                    String model = MODELS[random.nextInt(MODELS.length)];
-                    long mileage = Math.abs(random.nextLong()) % 200000;
+                    String number = "BUS-" + (i + 1) + "-" + RANDOM.nextInt(1000);
+                    String model = MODELS[RANDOM.nextInt(MODELS.length)];
+                    long mileage = Math.abs(RANDOM.nextLong()) % 200000;
                     return new Bus.Builder().number(number).model(model).mileage(mileage).build();
                 })
                 .collect(Collectors.toList());
